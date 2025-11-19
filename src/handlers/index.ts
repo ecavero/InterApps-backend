@@ -84,7 +84,14 @@ export const getUser = async(req: Request, res: Response) => {
         }
         try {
                const result = jwt.verify(token, process.env.JWT_SECRET) 
-               return res.status(200).json({result: result})
+               if (typeof result === 'object' && result.id) {
+                       const user = await User.findById(result.id).select('-password')
+                       if (!user) {
+                               const error = new Error('El usuario no existe')
+                               return res.status(404).json({error: error.message})
+                       }
+                       res.json(user)
+               }
         } catch (error) {
                 res.status(500).json({error: 'Tóken no válido'})
         }
