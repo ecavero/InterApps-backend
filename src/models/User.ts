@@ -1,0 +1,40 @@
+import mongoose, {Schema} from 'mongoose'
+
+export interface IUser {
+    handle: string
+    name: string
+    email: string
+    password: string
+}
+
+const userSchema = new Schema({
+    //Atributos del usuario
+    handle: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        unique: true
+    },
+    name: {
+        type: String,
+        required : true,
+        trim: true //es una función que quita espacios en blanco
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+        lowercase: true
+    },
+    password: {
+        type: String,
+        required: true,
+        trim: true
+    }
+})
+
+//Crear el modelo
+const UserModel = mongoose.model<IUser>('User', userSchema)
+export default UserModel
