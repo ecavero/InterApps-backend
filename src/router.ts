@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {body} from 'express-validator' //body permite validar el req.body
-import { createAccount, login } from './handlers/index.ts'
+import { createAccount, login, getUser } from './handlers/index.ts'
 import { handleInputErrors } from './middleware/validation.ts'
 
 //Permite configurar un objeto con todas las rutas que después podemos agregar a la app principal server.ts
@@ -23,5 +23,7 @@ router.post('/auth/login',
     body('password').notEmpty().withMessage('El password es muy corto, mínimo 8 caracteres'),
 
     login)
+
+router.get('/user', getUser)
 
 export default router

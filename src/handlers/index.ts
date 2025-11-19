@@ -69,3 +69,7 @@ export const login = async (req: Request, res: Response) => {
     res.send(token)
 
 }
+
+export const getUser = async(req: Request, res: Response) => {
+        console.log(req.headers.authorization)
+}
