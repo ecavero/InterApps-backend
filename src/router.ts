@@ -2,6 +2,7 @@ import {Router} from 'express'
 import {body} from 'express-validator' //body permite validar el req.body
 import { createAccount, login, getUser } from './handlers/index.ts'
 import { handleInputErrors } from './middleware/validation.ts'
+import { authenticate } from './middleware/auth.ts'
 
 //Permite configurar un objeto con todas las rutas que después podemos agregar a la app principal server.ts
 
@@ -24,6 +25,6 @@ router.post('/auth/login',
 
     login)
 
-router.get('/user', getUser)
+router.get('/user', authenticate,  getUser)
 
 export default router
