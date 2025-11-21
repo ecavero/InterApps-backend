@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {body} from 'express-validator' //body permite validar el req.body
-import { createAccount, login, getUser } from './handlers/index.ts'
+import { createAccount, login, getUser, updateProfile } from './handlers/index.ts'
 import { handleInputErrors } from './middleware/validation.ts'
 import { authenticate } from './middleware/auth.ts'
 
@@ -26,5 +26,12 @@ router.post('/auth/login',
     login)
 
 router.get('/user', authenticate,  getUser)
+
+router.patch('/user', 
+             body('handle').notEmpty().withMessage('El handle no puede estar vacío'),
+             body('descripcion').notEmpty().withMessage('La descipción no puede estar vacía'),
+             authenticate,
+            handleInputErrors, 
+             updateProfile)
 
 export default router
