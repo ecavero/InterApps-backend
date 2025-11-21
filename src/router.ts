@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {body} from 'express-validator' //body permite validar el req.body
-import { createAccount, login, getUser, updateProfile } from './handlers/index.ts'
+import { createAccount, login, getUser, updateProfile, uploadImage } from './handlers/index.ts'
 import { handleInputErrors } from './middleware/validation.ts'
 import { authenticate } from './middleware/auth.ts'
 
@@ -33,5 +33,6 @@ router.patch('/user',
              authenticate,
             handleInputErrors, 
              updateProfile)
+router.post('/user/image', authenticate, uploadImage)
 
 export default router

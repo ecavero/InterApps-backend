@@ -3,8 +3,11 @@ import {validationResult} from 'express-validator'
 import User from "../models/User.ts"
 import { checkPassword, hashPassword } from '../utils/auth.ts'
 import slug from 'slug'
+import formidable from 'formidable'
 import jwt from 'jsonwebtoken'
 import { generateJWT } from '../utils/jwt.ts'
+import cloudinary from '../config/cloudinary.ts'
+import {v4 as uuid} from 'uuid'
 
 export const createAccount = async(req: Request, res: Response)=>{
 
@@ -93,4 +96,33 @@ export const updateProfile = async(req: Request, res: Response) => {
                 return res.status(500).json({error: error.message})
                 
         }
+}
+
+export const uploadImage = async(req: Request, res:Response) => {
+   
+    const form = formidable({multiples: false}) //porque solo subiremos la imagen
+    form.parse(req, (error, fields, files)=> {
+    //console.log(files.file) //para que no tenga que acceder al objeto
+        cloudinary.uploader.upload(files.file[0].filepath, {public_id: uuid()}, async function(error, result){
+
+            //console.log(error)
+            //console.log(result)
+            if(error){
+                const error=new Error("Hubo un error al subir la imagen")
+                return res.status(500).json({error: error.message})
+            }
+            if(result){
+                req.user.image = result.secure_url
+                await req.user.save()
+                res.json({image: result.secure_url})
+            }
+        })
+    }) //leyendo datos
+   
+    try {
+        console.log('Desde uploadImage')
+    } catch(e){
+        const error = new Error("Hubo un error")
+        return res.status(500).json({error : error.message})
+    }
 }
