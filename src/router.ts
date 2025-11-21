@@ -29,7 +29,7 @@ router.get('/user', authenticate,  getUser)
 
 router.patch('/user', 
              body('handle').notEmpty().withMessage('El handle no puede estar vacío'),
-             body('descripcion').notEmpty().withMessage('La descipción no puede estar vacía'),
+             body('description').notEmpty().withMessage('La descipción no puede estar vacía'),
              authenticate,
             handleInputErrors, 
              updateProfile)
