@@ -86,7 +86,8 @@ export const updateProfile = async(req: Request, res: Response) => {
                 }
                 req.user.description = description
                 req.user.handle = handle
-                return res.status(200).json(req.body)
+                await req.user.save()
+                return res.status(200).send('Perfil modificado correctamente')
         } catch(e) {
                 const error = new Error(`Hubo un error: ${e}`)
                 return res.status(500).json({error: error.message})
